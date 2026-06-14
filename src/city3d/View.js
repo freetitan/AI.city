@@ -342,18 +342,18 @@ export class View {
         	this.basePlane.receiveShadow = true;
 		}
 
-        this.title = this.pool.title;
-        this.title.material = MAT.title;
-        if(AppState.withShadow){
-        	this.title.receiveShadow = true;
-        	this.title.castShadow = true;
-		}
+        // this.title = this.pool.title;
+        // this.title.material = MAT.title;
+        // if(AppState.withShadow){
+        // 	this.title.receiveShadow = true;
+        // 	this.title.castShadow = true;
+		// }
 
-		this.title.children[0].material = MAT.title_l;
-		this.title.children[1].material = MAT.title_g;
+		// this.title.children[0].material = MAT.title_l;
+		// this.title.children[1].material = MAT.title_g;
 
-        this.title.position.copy( this.center )
-        this.scene.add( this.title )
+        // this.title.position.copy( this.center )
+        // this.scene.add( this.title )
 
 	    // add random building 
 	    this.buildings = new THREE.Group()
@@ -425,14 +425,14 @@ export class View {
 
 		this.traffic.clearAll()
 
-		this.title.material.dispose();
-		this.title.children[0].material.dispose();
-		this.title.children[1].material.dispose();
-		this.title.geometry.dispose()
-		this.title.children[0].geometry.dispose();
-		this.title.children[1].geometry.dispose();
-		this.title.children = []
-		this.scene.remove( this.title )
+		// this.title.material.dispose();
+		// this.title.children[0].material.dispose();
+		// this.title.children[1].material.dispose();
+		// this.title.geometry.dispose()
+		// this.title.children[0].geometry.dispose();
+		// this.title.children[1].geometry.dispose();
+		// this.title.children = []
+		// this.scene.remove( this.title )
 
 		this.buildings.children = []
 		this.scene.remove( this.buildings )

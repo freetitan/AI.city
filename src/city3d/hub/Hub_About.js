@@ -18,7 +18,7 @@ export class Hub_About extends Hub_Pannel {
         var desc = document.createElement('div');
         desc.style.cssText = 'font-size:12px; color:#dce8f5; line-height:1.6; margin-bottom:10px; pointer-events:auto;';
         desc.innerHTML = '<b>AI.city</b> v' + AppState.version + '<br>'
-                       + 'Author <a href="https://github.com/lo-th" target="_blank">lo-th</a><br><br>'
+                       + 'Author <a href="https://github.com/freetitan" target="_blank">freetitan</a><br><br>'
                        + '3d with <b>three.js</b><br>'
                        + 'Simulation inspired by MicropolisJS';
         body.appendChild( desc );
@@ -43,7 +43,7 @@ export class Hub_About extends Hub_Pannel {
 
         this.linke = document.createElement('div');
         this.linke.style.cssText = 'pointer-events:auto; font-size:12px;';
-        this.linke.innerHTML = "<a href=https://github.com/lo-th/AI.city' target='_blank'>GitHub 源代码 ↗</a>";
+        this.linke.innerHTML = "<a href='https://github.com/freetitan/AI.city' target='_blank'>GitHub 源代码 ↗</a>";
         body.appendChild( this.linke );
 
 	}

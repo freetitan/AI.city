@@ -206,7 +206,7 @@ export class Hub {
         b0.addEventListener('click',  function ( e ) { e.preventDefault(); AppState.view3d.openMap('NEW'); }, false);
         if(b1) b1.addEventListener('click',  function ( e ) { e.preventDefault(); AppState.view3d.openMap('LOADLOCAL', savegame ); }, false);
         if(b2) b2.addEventListener('click',  function ( e ) { e.preventDefault(); AppState.view3d.openMap('LOAD'); }, false);
-        b3.addEventListener('click',  function ( e ) { e.preventDefault(); let w = window.open('https://github.com/lo-th/AI.city','_blank'); }, false);
+        b3.addEventListener('click',  function ( e ) { e.preventDefault(); let w = window.open('https://github.com/freetitan/AI.city','_blank'); }, false);
 
     }
 
