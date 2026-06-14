@@ -698,13 +698,13 @@ export class Pool {
 				}
 
 				// BASIC 
-				let i = 9;
+				let i = 10;
 				while(i--) g.industrial[i] = o['i_0'+i]
-				i = 19;
+				i = 20;
 				while(i--) g.residential[i] = i<10 ? o['r_0'+i] : o['r_'+i]
-				i = 21;
+				i = 22;
 				while(i--) g.commercial[i] = i<10 ? o['c_0'+i] : o['c_'+i]
-				i = 12;
+				i = 13;
 				while(i--) g.house[i] = i<10 ? o['rh_0'+i] : o['rh_'+i]
 
     		break;
