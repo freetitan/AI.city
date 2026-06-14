@@ -5,7 +5,7 @@ export class Hub_Economy extends Hub_Pannel {
 
 	constructor( hub, isRight  ) {
 
-		super( hub, 'Economy', isRight  );
+		super( hub, '发展模式', isRight  );
         this.updateFunction = AppState.main.getIndustrySpec
 
 	}
@@ -16,12 +16,12 @@ export class Hub_Economy extends Hub_Pannel {
 
         var hdr = document.createElement('div');
         hdr.style.cssText = 'font-size:11px; color:rgba(180,210,240,0.6); margin-bottom:10px; pointer-events:none; line-height:1.5;';
-        hdr.textContent = 'Choose your city\'s economic focus. Specializations affect tax yields, pollution, and city growth.';
+        hdr.textContent = '选择城市发展战略定位，将深刻影响城市税收、环境、就业和民生等各项指标表现。';
         this.body.appendChild(hdr);
 
         if (Array.isArray(list)) {
             for (var i = 0; i < list.length; i++) {
-                this._addIndustrySpecRow(this.body, list[i]);
+                this._addDevModeRow(this.body, list[i]);
             }
         }
 	}
@@ -35,26 +35,26 @@ export class Hub_Economy extends Hub_Pannel {
 
 	}
 
-	_addIndustrySpecRow (container, spec) {
+	_addDevModeRow (container, spec) {
         var _this = this;
         var row = document.createElement('div');
-        row.style.cssText = 'display:flex; align-items:flex-start; gap:8px; margin-bottom:8px; pointer-events:auto; cursor:pointer;'
-                          + ' padding:8px; border-radius:6px; border:1px solid '
+        row.style.cssText = 'display:flex; align-items:flex-start; gap:8px; margin-bottom:6px; pointer-events:auto; cursor:pointer;'
+                          + ' padding:6px 8px; border-radius:6px; border:1px solid '
                           + (spec.active ? 'rgba(240,184,74,0.6)' : 'rgba(100,160,220,0.2)') + ';'
                           + ' background:' + (spec.active ? 'rgba(240,184,74,0.10)' : 'rgba(255,255,255,0.03)') + ';'
                           + ' transition:background 120ms;';
         row.dataset.id = spec.id;
 
         var icon = document.createElement('div');
-        icon.style.cssText = 'flex-shrink:0; font-size:22px; line-height:1; margin-top:2px;';
+        icon.style.cssText = 'flex-shrink:0; font-size:18px; line-height:1; margin-top:2px;';
         icon.textContent = spec.icon || '🏙️';
         row.appendChild(icon);
 
         var info = document.createElement('div');
         info.style.cssText = 'pointer-events:none; flex:1;';
-        info.innerHTML = '<div style="font-size:13px; font-weight:600; color:#dce8f5;">' + spec.name
-                       + (spec.active ? ' <span style="color:#f0b84a; font-size:10px;">[Active]</span>' : '') + '</div>'
-                       + '<div style="font-size:11px; color:rgba(180,210,240,0.6); line-height:1.4; margin-top:2px;">' + spec.description + '</div>';
+        info.innerHTML = '<div style="font-size:12px; font-weight:600; color:#dce8f5;">' + spec.name
+                       + (spec.active ? ' <span style="color:#f0b84a; font-size:10px;">[当前模式]</span>' : '') + '</div>'
+                       + '<div style="font-size:10px; color:rgba(180,210,240,0.6); line-height:1.4; margin-top:1px;">' + spec.description + '</div>';
         row.appendChild(info);
 
         row.addEventListener('click', function(e){

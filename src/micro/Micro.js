@@ -28,12 +28,14 @@ export const Micro = {
                    'fireMaintenanceBudget', 'cityTax', 'roadEffect', 'policeEffect', 'fireEffect',
                    'resTaxRate', 'comTaxRate', 'indTaxRate', 'bondDebt',
                    'waterPercent', 'waterSpend', 'waterMaintenanceBudget', 'waterEffect',
-                   'educationPercent', 'educationSpend', 'educationMaintenanceBudget', 'educationEffect'
+                   'educationPercent', 'educationSpend', 'educationMaintenanceBudget', 'educationEffect',
+                   'socialSecurityPercent', 'socialSecuritySpend', 'socialSecurityMaintenanceBudget', 'socialSecurityEffect',
+                   'environmentPercent', 'environmentSpend', 'environmentMaintenanceBudget', 'environmentEffect',
+                   'techInnovationPercent', 'techInnovationSpend', 'techInnovationMaintenanceBudget', 'techInnovationEffect'
                    ],
     // eval
-    PROBLEMS : ['CVP_CRIME', 'CVP_POLLUTION', 'CVP_HOUSING', 'CVP_TAXES', 'CVP_TRAFFIC', 'CVP_UNEMPLOYMENT', 'CVP_FIRE'],
-    NUMPROBLEMS : 7,//this.PROBLEMS.length,
-    NUM_COMPLAINTS : 4,
+    PROBLEMS : ['CVP_CRIME', 'CVP_POLLUTION', 'CVP_HOUSING', 'CVP_TAXES', 'CVP_TRAFFIC', 'CVP_UNEMPLOYMENT', 'CVP_FIRE', 'CVP_INEQUALITY', 'CVP_PUBLIC_HEALTH', 'CVP_ENVIRONMENT', 'CVP_GOVERNANCE', 'CVP_LIVELIHOOD', 'CVP_SUSTAINABILITY'],
+    NUM_COMPLAINTS : 6,
     problemData : [],
     EvalProps : ['cityClass', 'cityScore'],
 
@@ -91,7 +93,7 @@ export const Micro = {
     SPRITE_TORNADO : 6,
     SPRITE_EXPLOSION : 7,
 
-    // Evaluation
+    // Evaluation — 城市等级（智能管理视角）
     CC_VILLAGE : 'VILLAGE',
     CC_TOWN : 'TOWN',
     CC_CITY : 'CITY',
@@ -105,6 +107,13 @@ export const Micro = {
     TRAFFIC : 4,
     UNEMPLOYMENT : 5,
     FIRE : 6,
+    INEQUALITY : 7,       // 贫富差距
+    PUBLIC_HEALTH : 8,    // 公共卫生
+    ENVIRONMENT : 9,      // 生态环境
+    GOVERNANCE : 10,      // 治理效能
+    LIVELIHOOD : 11,      // 民生保障
+    SUSTAINABILITY : 12,  // 可持续发展
+    NUMPROBLEMS : 13,
 
     // Valves
     RES_VALVE_RANGE : 2000,
@@ -130,6 +139,14 @@ export const Micro = {
     educationMaintenanceCost : 50, // cost per hospital/school per tax cycle
     MAX_EDUCATION_EFFECT : 32,     // scales education quality (same scale as water/road)
 
+    // 财政支出新增类别
+    socialSecurityMaintenanceCost : 8,   // 社会保障人均成本
+    MAX_SOCIAL_SECURITY_EFFECT : 32,
+    environmentMaintenanceCost : 6,      // 环境保护人均成本
+    MAX_ENVIRONMENT_EFFECT : 32,
+    techInnovationMaintenanceCost : 10,  // 科技创新人均成本
+    MAX_TECH_INNOVATION_EFFECT : 32,
+
     // PowerManager
     EOL_POWER_STRENGTH : 50,
     COAL_POWER_STRENGTH : 700,
@@ -148,7 +165,7 @@ export const Micro = {
     // storage
     CURRENT_VERSION : 3,
     SAVE_VERSION : 1,
-    KEY : '3DcityJSGame',
+    KEY : 'SmartCitySimGame',
 
     // disasters
     DisChance: [479, 239, 59],
@@ -181,12 +198,16 @@ export const Micro = {
     EDUCATION_EFFECT_RANGE: 200,
     HEALTH_EFFECT_RANGE: 200,
 
-    // Industry Specialization types
+    // Industry Specialization types — 城市发展模式
     INDUSTRY_MIXED:         'MIXED',
     INDUSTRY_TECH:          'TECH',
     INDUSTRY_MANUFACTURING: 'MANUFACTURING',
     INDUSTRY_TOURISM:       'TOURISM',
     INDUSTRY_FARMING:       'FARMING',
+    INDUSTRY_GREEN:         'GREEN',           // 绿色生态
+    INDUSTRY_SMART:         'SMART',           // 智慧城市
+    INDUSTRY_WELFARE:       'WELFARE',         // 民生优先
+    INDUSTRY_INNOVATION:    'INNOVATION',      // 创新驱动
 
     simData:null,
     messageManager:null,

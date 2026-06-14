@@ -5,7 +5,7 @@ export class Hub_Awards extends Hub_Pannel {
 
 	constructor( hub, isRight ) {
 
-		super( hub, 'Awards', isRight );
+		super( hub, '成就', isRight );
         this.updateFunction = AppState.main.getAwards
 
 	}
@@ -14,7 +14,7 @@ export class Hub_Awards extends Hub_Pannel {
 
 		// Populate achievements
         var html = '<div style="font-size:11px; color:rgba(180,210,240,0.6); margin-bottom:8px;">'
-                 + 'Progress: <span style="color:#4a9edd; font-weight:bold;">' + progress.unlocked + '</span> / ' + progress.total + '</div>';
+                 + '进度: <span style="color:#4a9edd; font-weight:bold;">' + progress.unlocked + '</span> / ' + progress.total + '</div>';
 
         for (var i = 0; i < data.length; i++) {
             var ach = data[i];

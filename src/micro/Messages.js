@@ -111,7 +111,17 @@ var messageData = {
   // Bonds
   BOND_PAYMENT_DUE: MiscUtils.mcd('Annual bond payment deducted'),
   BOND_ISSUED: MiscUtils.mcd('Municipal bond issued'),
-  BOND_HIGH_DEBT: MiscUtils.mcd('Warning: high municipal debt')
+  BOND_HIGH_DEBT: MiscUtils.mcd('Warning: high municipal debt'),
+
+  // 政策仿真系统新增消息
+  NEED_SOCIAL_SECURITY: MiscUtils.mcd('Social security underfunded'),
+  NEED_ENVIRONMENT_PROTECTION: MiscUtils.mcd('Environmental protection underfunded'),
+  NEED_TECH_INNOVATION: MiscUtils.mcd('Tech innovation underfunded'),
+  POLICY_SYNERGY_BONUS: MiscUtils.mcd('Policy synergy bonus'),
+  POLICY_CONFLICT_WARNING: MiscUtils.mcd('Policy conflict warning'),
+  GINI_HIGH: MiscUtils.mcd('Gini coefficient too high'),
+  GREEN_RATE_LOW: MiscUtils.mcd('Green rate too low'),
+  LIVELIHOOD_INDEX_LOW: MiscUtils.mcd('Livelihood index too low')
 };
 
 export const Messages = Object.defineProperties({}, messageData);

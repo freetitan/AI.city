@@ -454,9 +454,7 @@ export class MainGame {
     }
 
     setBudget (budgetData){
-        // Format: [resTax, comTax, indTax, roadRate, fireRate, policeRate, waterRate]
-        // Legacy: [resTax, comTax, indTax, roadRate, fireRate, policeRate]
-        // Old:    [taxRate, roadRate, fireRate, policeRate]
+        // Format: [resTax, comTax, indTax, roadRate, fireRate, policeRate, waterRate, educationRate, ssRate, envRate, techRate]
         if (Array.isArray(budgetData) && budgetData.length >= 6) {
             this.simulation.budget.setZoneTax(budgetData[0], budgetData[1], budgetData[2]);
             this.simulation.budget.roadPercent   = budgetData[3] / 100;
@@ -467,6 +465,15 @@ export class MainGame {
             }
             if (budgetData.length >= 8) {
                 this.simulation.budget.educationPercent = budgetData[7] / 100;
+            }
+            if (budgetData.length >= 9) {
+                this.simulation.budget.socialSecurityPercent = budgetData[8] / 100;
+            }
+            if (budgetData.length >= 10) {
+                this.simulation.budget.environmentPercent = budgetData[9] / 100;
+            }
+            if (budgetData.length >= 11) {
+                this.simulation.budget.techInnovationPercent = budgetData[10] / 100;
             }
         } else {
             this.simulation.budget.setTax(budgetData[0]);
@@ -503,7 +510,13 @@ export class MainGame {
                     waterFund:      b.waterFund,
                     waterRate:      Math.floor(b.waterPercent * 100),
                     educationFund:  b.educationFund,
-                    educationRate:  Math.floor(b.educationPercent * 100)
+                    educationRate:  Math.floor(b.educationPercent * 100),
+                    socialSecurityFund:  b.socialSecurityFund,
+                    socialSecurityRate:  Math.floor(b.socialSecurityPercent * 100),
+                    environmentFund:  b.environmentFund,
+                    environmentRate:  Math.floor(b.environmentPercent * 100),
+                    techInnovationFund:  b.techInnovationFund,
+                    techInnovationRate:  Math.floor(b.techInnovationPercent * 100)
                 };
             break;
 
@@ -536,7 +549,20 @@ export class MainGame {
                     ? Math.round((b.educationEffect / Micro.MAX_EDUCATION_EFFECT) * 100)
                     : 100;
 
+                // Social security coverage
+                let ssCoverage = b.socialSecurityMaintenanceBudget > 0
+                    ? Math.round((b.socialSecurityEffect / Micro.MAX_SOCIAL_SECURITY_EFFECT) * 100)
+                    : 100;
+                let envCoverage = b.environmentMaintenanceBudget > 0
+                    ? Math.round((b.environmentEffect / Micro.MAX_ENVIRONMENT_EFFECT) * 100)
+                    : 100;
+                let techCoverage = b.techInnovationMaintenanceBudget > 0
+                    ? Math.round((b.techInnovationEffect / Micro.MAX_TECH_INNOVATION_EFFECT) * 100)
+                    : 100;
+
                 let indDef = this.simulation.industrySpec.getCurrentDef();
+
+                let policyInteractions = this.simulation.ordinances.getPolicyInteractions();
 
                 data = [
                     evaluation.cityYes,   // 0
@@ -556,7 +582,21 @@ export class MainGame {
                     indDef,                 // 14
                     census.hospitalPop,     // 15
                     census.churchPop,       // 16
-                    educationCoverage       // 17
+                    educationCoverage,      // 17
+                    // 政策仿真新增数据
+                    census.giniCoefficient, // 18
+                    census.engelCoefficient,// 19
+                    census.greenRate,       // 20
+                    census.livelihoodIndex, // 21
+                    census.governanceIndex, // 22
+                    census.sustainabilityIndex, // 23
+                    census.techInnovationIndex, // 24
+                    census.socialSecurityCoverage, // 25
+                    ssCoverage,             // 26
+                    envCoverage,            // 27
+                    techCoverage,           // 28
+                    policyInteractions.synergy,  // 29
+                    policyInteractions.conflict  // 30
                 ];
 
             break;
@@ -776,7 +816,7 @@ export class MainGame {
         try {
             this.savedGame = JSON.parse(gameData);
         } catch (e) {
-            console.error('3d.city: failed to parse save data — cannot load game.', e);
+            console.error('AI.city: failed to parse save data — cannot load game.', e);
             CityGame.post({ tell:"LOADERROR", message:"Save data is corrupt or unreadable." });
             return;
         }

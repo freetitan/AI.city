@@ -78,12 +78,30 @@ export class Census {
         this.airportPop = 0;
         this.parkCount = 0;
 
-        // Education is derived from hospitals + churches + land value
+        // 教育由医院 + 学校 + 地价综合得出
         this.educationLevel = 0;
-        // Health is derived from hospitals + pollution (inverse)
+        // 健康由医院 + 污染反比 得出
         this.healthLevel = 0;
-        // Happiness combines many factors
+        // 幸福指数综合多因素
         this.happinessLevel = 50;
+
+        // ═══ 政策仿真新增指标 ═══
+        // 基尼系数 (0~1, 越低越公平)
+        this.giniCoefficient = 0.35;
+        // 恩格尔系数 (0~1, 越低越富裕)
+        this.engelCoefficient = 0.40;
+        // 城市绿化率 (0~100%)
+        this.greenRate = 30;
+        // 民生综合指数 (0~100)
+        this.livelihoodIndex = 50;
+        // 治理效能指数 (0~100)
+        this.governanceIndex = 50;
+        // 可持续发展指数 (0~100)
+        this.sustainabilityIndex = 50;
+        // 科技创新指数 (0~100)
+        this.techInnovationIndex = 20;
+        // 社会保障覆盖率 (0~100%)
+        this.socialSecurityCoverage = 40;
 
     }
 

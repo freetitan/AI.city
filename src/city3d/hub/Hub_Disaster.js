@@ -5,9 +5,9 @@ export class Hub_Disaster extends Hub_Pannel {
 
 	constructor( hub, isRight ) {
 
-		super( hub, 'Disaster', isRight );
+		super( hub, '灾害', isRight );
 
-		this.type = ['None', 'Monster', 'Fire', 'Flood', 'Crash', 'Meltdown', 'Tornado', 'Earthquake'];
+		this.type = ['无', '怪兽袭击', '火灾', '洪水', '空难', '核泄漏', '龙卷风', '地震'];
 		this.icon = ['', '🦖 ', '🔥 ', '🌊 ', '✈︎ ', '💥 ', '🌪️ ', '♒︎ '];	
 		this.buttons = [];
 

@@ -189,12 +189,6 @@ export class Evaluation {
     }
 
     doProblems ( census, budget, blockMaps ) {
-        //var problemTaken = [];
-
-        /*for (var i = 0; i < Micro.NUMPROBLEMS; i++) {
-            problemTaken[i] = false;
-            problemTable[i] = 0;
-        }*/
 
         Micro.problemData[Micro.CRIME]        = census.crimeAverage;
         Micro.problemData[Micro.POLLUTION]    = census.pollutionAverage;
@@ -203,6 +197,13 @@ export class Evaluation {
         Micro.problemData[Micro.TRAFFIC]      = EvaluationUtils.getTrafficAverage( blockMaps, census );
         Micro.problemData[Micro.UNEMPLOYMENT] = EvaluationUtils.getUnemployment( census );
         Micro.problemData[Micro.FIRE]         = EvaluationUtils.getFireSeverity( census );
+        // 政策仿真新增问题维度
+        Micro.problemData[Micro.INEQUALITY]   = Math.max(0, (census.giniCoefficient - 0.35) * 300);
+        Micro.problemData[Micro.PUBLIC_HEALTH] = Math.max(0, 200 - census.healthLevel);
+        Micro.problemData[Micro.ENVIRONMENT]  = census.pollutionAverage * 0.8 + Math.max(0, 50 - (census.greenRate || 30));
+        Micro.problemData[Micro.GOVERNANCE]   = Math.max(0, 100 - (census.governanceIndex || 50));
+        Micro.problemData[Micro.LIVELIHOOD]   = Math.max(0, 100 - (census.livelihoodIndex || 50));
+        Micro.problemData[Micro.SUSTAINABILITY] = Math.max(0, 100 - (census.sustainabilityIndex || 50));
 
         this.voteProblems();
 

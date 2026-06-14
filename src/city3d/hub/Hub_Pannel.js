@@ -74,7 +74,7 @@ export class Hub_Pannel {
         var c = document.createElement('button');
         c.className = 'hub-win-close';
         c.innerHTML = '✕';
-        c.title = 'Close (Esc)';
+        c.title = '关闭 (Esc)';
         c.addEventListener('click', function(e){ e.preventDefault(); close(); }, false);
         h.appendChild(c);
         

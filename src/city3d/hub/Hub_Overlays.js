@@ -5,9 +5,9 @@ export class Hub_Overlays extends Hub_Pannel {
 
 	constructor( hub, isRight ) {
 
-		super( hub, 'Overlays', isRight );
+		super( hub, '图层', isRight );
 
-		this.type = ['None', 'Density', 'Growth', 'Land value', 'Crime Rate', 'Pollution', 'Traffic', 'Power Grid', 'Fire', 'Police'];
+		this.type = ['无', '人口密度', '发展速度', '土地价值', '犯罪率', '污染', '交通', '电网', '火灾风险', '警力覆盖'];
 		this.icon = ['', '👨‍👩‍👧 ', '📈 ', '💰 ', '☠️ ', '🤢 ', '🚗 ', '⚡ ' , '🔥 ', '🚨 '];
         this.buttons = [];
 

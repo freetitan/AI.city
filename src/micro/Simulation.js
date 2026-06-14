@@ -43,6 +43,7 @@ import { CityHistory, HistoryEventType } from './game/CityHistory.js';
 import { SeasonManager } from './game/SeasonManager.js';
 import { Ordinances } from './game/Ordinances.js';
 import { IndustrySpecialization } from './game/IndustrySpecialization.js';
+import { PolicyEngine } from './game/PolicyEngine.js';
 
 export class Simulation {
 
@@ -100,6 +101,7 @@ export class Simulation {
         this.seasonManager = new SeasonManager();
         this.ordinances = new Ordinances();
         this.industrySpec = new IndustrySpecialization();
+        this.policyEngine = new PolicyEngine();
 
         this.messageManager = new MessageManager();
         Micro.messageManager = this.messageManager;
@@ -179,6 +181,7 @@ export class Simulation {
         this.cityHistory.save(saveData);
         this.ordinances.save(saveData);
         this.industrySpec.save(saveData);
+        this.policyEngine.save(saveData);
 
     }
 
@@ -195,6 +198,7 @@ export class Simulation {
         this.cityHistory.load(saveData);
         this.ordinances.load(saveData);
         this.industrySpec.load(saveData);
+        this.policyEngine.load(saveData);
 
     }
 
@@ -281,19 +285,32 @@ export class Simulation {
             : 100;
         this.infos[24] = educationPct;
 
+        // ═══ 政策仿真新增指标 ═══
+        this.infos[25] = this.census.giniCoefficient;
+        this.infos[26] = this.census.engelCoefficient;
+        this.infos[27] = this.census.greenRate;
+        this.infos[28] = this.census.livelihoodIndex;
+        this.infos[29] = this.census.governanceIndex;
+        this.infos[30] = this.census.sustainabilityIndex;
+        this.infos[31] = this.census.techInnovationIndex;
+        this.infos[32] = this.census.socialSecurityCoverage;
+
         return this.infos
 
     }
 
-    // Compute education level from infrastructure
+    // Compute education level, health, happiness, and policy indicators
     updateEducationHealth () {
         let census = this.census;
-        let fx = this.ordinances.getEffects();
+        let ordFx = this.ordinances.getEffects();
         let indFx = this.industrySpec.getEffects();
 
-        // Count placed park tiles (WOODS2-WOODS5 = tile values 40–43; FOUNTAIN = 840).
-        // These tiles have values below the MapScanner skip threshold (Tile.FLOOD = 48),
-        // so they are never visited during mapScan and must be counted with a direct scan.
+        // 检测政策协同与冲突
+        this.policyEngine.detectInteractions(this.ordinances);
+        // 计算综合政策效果（含协同加成和冲突削减）
+        let effectiveFx = this.policyEngine.computeEffectiveEffects(ordFx);
+
+        // Count placed park tiles
         let parkCount = 0;
         let map = this.map;
         for (let x = 0; x < map.width; x++) {
@@ -304,54 +321,66 @@ export class Simulation {
         }
         census.parkCount = parkCount;
 
-        // Education: derived from hospitals and schools (churches), scaled by funding level,
-        // land value, and industry specialization
+        // Education
         let educationFundScale = this.budget.educationEffect / Micro.MAX_EDUCATION_EFFECT;
         let educationBase = (census.hospitalPop * 40 + census.churchPop * 20) * educationFundScale;
         let landValueFactor = Math.min(census.landValueAverage, 150);
         let popFactor = census.totalPop > 0 ? Math.min(census.totalPop / 100, 50) : 0;
 
         census.educationLevel = Math.min(
-            Math.floor(educationBase + landValueFactor * 0.3 + popFactor * 0.2 + fx.educationBonus + indFx.educationMod),
+            Math.floor(educationBase + landValueFactor * 0.3 + popFactor * 0.2 + (effectiveFx.educationBonus || 0) + indFx.educationMod),
             Micro.EDUCATION_EFFECT_RANGE
         );
 
-        // Health: hospitals + ordinances + water supply funding + industry effects
-        let healthBase = census.hospitalPop * 50 + fx.healthBonus + indFx.healthMod;
-        let effectivePollution = Math.max(0, census.pollutionAverage + fx.pollutionMod + indFx.pollutionMod);
+        // Health: hospitals + ordinances + water + social security + industry effects
+        let healthBase = census.hospitalPop * 50 + (effectiveFx.healthBonus || 0) + indFx.healthMod;
+        let effectivePollution = Math.max(0, census.pollutionAverage + (effectiveFx.pollutionMod || 0) + indFx.pollutionMod);
         let pollutionPenalty = effectivePollution * 0.8;
         let crimeHealthPenalty = census.crimeAverage * 0.3;
 
-        // Water supply: underfunded water infrastructure degrades health
         let waterCoverage = this.budget.waterMaintenanceBudget > 0
             ? (this.budget.waterEffect / Micro.MAX_WATER_EFFECT)
             : 1.0;
-        let waterHealthBonus = Math.round(waterCoverage * 30); // up to +30 health from full water funding
+        let waterHealthBonus = Math.round(waterCoverage * 30);
+
+        let ssHealthBonus = 0;
+        if (this.budget.socialSecurityMaintenanceBudget > 0) {
+            ssHealthBonus = Math.round((this.budget.socialSecurityEffect / Micro.MAX_SOCIAL_SECURITY_EFFECT) * 15);
+        }
 
         census.healthLevel = Math.min(Math.max(
-            Math.floor(healthBase - pollutionPenalty - crimeHealthPenalty + 20 + waterHealthBonus),
+            Math.floor(healthBase - pollutionPenalty - crimeHealthPenalty + 20 + waterHealthBonus + ssHealthBonus),
             0), Micro.HEALTH_EFFECT_RANGE);
 
         // Happiness: composite score (0-100)
-        let happyScore = 50; // baseline
-        happyScore += (this.evaluation.cityScore - 500) * 0.02;  // score factor
-        happyScore -= census.crimeAverage * 0.1;                  // crime hurts
-        happyScore -= effectivePollution * 0.08;                  // pollution hurts
-        happyScore += (census.educationLevel / Micro.EDUCATION_EFFECT_RANGE) * 15; // education helps
-        happyScore += (census.healthLevel / Micro.HEALTH_EFFECT_RANGE) * 10;       // health helps
-        happyScore += this.seasonManager.happinessMod;            // season effect
-        // Park bonus from specialization (tourism/farming value parks more)
+        let happyScore = 50;
+        happyScore += (this.evaluation.cityScore - 500) * 0.02;
+        happyScore -= census.crimeAverage * 0.1;
+        happyScore -= effectivePollution * 0.08;
+        happyScore += (census.educationLevel / Micro.EDUCATION_EFFECT_RANGE) * 15;
+        happyScore += (census.healthLevel / Micro.HEALTH_EFFECT_RANGE) * 10;
+        happyScore += this.seasonManager.happinessMod;
         if (indFx.parkBonus > 0) happyScore += Math.min(parkCount * indFx.parkBonus * 0.1, 10);
 
-        // Unemployment penalty (including specialization modifier)
         let unemployment = EvaluationUtils.getUnemployment(census);
         let effectiveUnemploy = Math.max(0, unemployment + indFx.unemployMod);
         happyScore -= effectiveUnemploy * 0.05;
 
-        // Tax penalty
         if (this.budget.cityTax > 10) happyScore -= (this.budget.cityTax - 10) * 2;
 
+        // 基尼系数高→幸福感下降
+        happyScore -= Math.max(0, (census.giniCoefficient - 0.4)) * 30;
+        // 民生指数贡献
+        happyScore += (census.livelihoodIndex - 50) * 0.1;
+        // 协同加成
+        if (effectiveFx._synergyCount > 0) happyScore += effectiveFx._synergyCount * 2;
+        // 冲突惩罚
+        if (effectiveFx._conflictCount > 0) happyScore -= effectiveFx._conflictCount * 3;
+
         census.happinessLevel = Math.round(Math.max(0, Math.min(100, happyScore)));
+
+        // ═══ 政策仿真指标更新 ═══
+        this.policyEngine.updateAllIndicators(census, this.budget, effectiveFx, indFx);
     }
 
     // Compute percentage of populated land covered by police/fire stations.
@@ -548,6 +577,13 @@ export class Simulation {
             case 57: if (this.budget.fireEffect < Math.floor(7 * Micro.MAX_FIRESTATION_EFFECT / 10) && this.census.totalPop > 20) this.messageManager.sendMessage(Messages.FIRE_STATION_NEEDS_FUNDING); break;
             case 60: if (this.budget.policeEffect < Math.floor(7 * Micro.MAX_POLICESTATION_EFFECT / 10) && this.census.totalPop > 20) this.messageManager.sendMessage(Messages.POLICE_NEEDS_FUNDING); break;
             case 63: if (EvaluationUtils.getTrafficAverage(this.blockMaps, this.census) > 60) this.messageManager.sendMessage(Messages.TRAFFIC_JAMS, -1, -1, true); break;
+            // 政策仿真新增消息
+            case 7: if (this.budget.socialSecurityMaintenanceBudget > 0 && this.budget.socialSecurityEffect < Math.floor(5 * Micro.MAX_SOCIAL_SECURITY_EFFECT / 8) && this.census.totalPop > 100) this.messageManager.sendMessage(Messages.NEED_SOCIAL_SECURITY); break;
+            case 13: if (this.budget.environmentMaintenanceBudget > 0 && this.budget.environmentEffect < Math.floor(5 * Micro.MAX_ENVIRONMENT_EFFECT / 8) && this.census.totalPop > 100) this.messageManager.sendMessage(Messages.NEED_ENVIRONMENT_PROTECTION); break;
+            case 19: if (this.budget.techInnovationMaintenanceBudget > 0 && this.budget.techInnovationEffect < Math.floor(5 * Micro.MAX_TECH_INNOVATION_EFFECT / 8) && this.census.totalPop > 100) this.messageManager.sendMessage(Messages.NEED_TECH_INNOVATION); break;
+            case 23: if (this.census.giniCoefficient > 0.45 && this.census.totalPop > 500) this.messageManager.sendMessage(Messages.GINI_HIGH); break;
+            case 29: if ((this.census.greenRate || 30) < 25 && this.census.totalPop > 200) this.messageManager.sendMessage(Messages.GREEN_RATE_LOW); break;
+            case 34: if ((this.census.livelihoodIndex || 50) < 30 && this.census.totalPop > 200) this.messageManager.sendMessage(Messages.LIVELIHOOD_INDEX_LOW); break;
         }
     }
 

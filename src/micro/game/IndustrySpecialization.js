@@ -1,10 +1,10 @@
-/* OpenPublica — Industry Specialization
+/* 城市智能管理与公共政策模拟仿真系统 — 城市发展模式
  *
- * Players choose a city economic focus that shapes how the simulation
- * behaves — affecting tax yields, pollution, unemployment, and growth.
+ * 管理者选择城市的发展定位和战略方向，深刻影响模拟仿真的
+ * 各项指标表现——税收、污染、就业、民生、可持续性等。
  *
- * Specializations are mutually exclusive (only one active at a time).
- * Effects are returned via getEffects() and applied in Simulation.js.
+ * 发展模式互斥（同时仅一个生效），效果通过 getEffects() 返回，
+ * 在 Simulation.js 中应用。
  */
 
 import { Micro } from '../Micro.js';
@@ -12,87 +12,110 @@ import { Micro } from '../Micro.js';
 export const SPECIALIZATION_DEFS = [
     {
         id: Micro.INDUSTRY_MIXED,
-        name: 'Mixed Economy',
+        name: '均衡发展',
         icon: '🏙️',
-        description: 'Balanced development across all sectors. No bonuses or penalties.',
+        description: '各产业协调并进，无额外加成也无负面效应，适合探索阶段。',
         effects: {
-            resTaxMod:     0,     // additive modifier on residential tax rate (percentage points)
-            comTaxMod:     0,     // additive modifier on commercial tax rate
-            indTaxMod:     0,     // additive modifier on industrial tax rate
-            pollutionMod:  0,     // city-wide pollution delta
-            unemployMod:   0,     // unemployment score delta
-            landValueMod:  0,     // land value average delta
-            educationMod:  0,     // education level bonus
-            healthMod:     0,     // health level bonus
-            parkBonus:     0      // bonus per park tile
+            resTaxMod: 0, comTaxMod: 0, indTaxMod: 0,
+            pollutionMod: 0, unemployMod: 0, landValueMod: 0,
+            educationMod: 0, healthMod: 0, parkBonus: 0,
+            giniMod: 0, greenRateMod: 0, livelihoodMod: 0
         }
     },
     {
         id: Micro.INDUSTRY_TECH,
-        name: 'Tech Hub',
+        name: '科技创新中心',
         icon: '💻',
-        description: 'High-skilled jobs, clean industry. Higher commercial/industrial tax, lower pollution, but expensive infrastructure.',
+        description: '高技能人才集聚，产业清洁高效。商工税收提升，污染降低，但基础设施成本高。',
         effects: {
-            resTaxMod:     0,
-            comTaxMod:     1,     // +1% effective commercial tax rate
-            indTaxMod:     1,     // +1% effective industrial tax rate
-            pollutionMod: -20,    // cleaner industry
-            unemployMod:  -15,    // more jobs
-            landValueMod:  10,    // desirable neighbourhood
-            educationMod:  20,    // tech culture boosts education
-            healthMod:      5,
-            parkBonus:      0
+            resTaxMod: 0, comTaxMod: 1, indTaxMod: 1,
+            pollutionMod: -20, unemployMod: -15, landValueMod: 10,
+            educationMod: 20, healthMod: 5, parkBonus: 0,
+            giniMod: 2, greenRateMod: 0, livelihoodMod: 0
         }
     },
     {
         id: Micro.INDUSTRY_MANUFACTURING,
-        name: 'Manufacturing',
+        name: '先进制造',
         icon: '🏭',
-        description: 'Heavy industry drives strong tax revenue but creates significant pollution.',
+        description: '工业驱动增长，税收丰厚，但环境污染显著，健康风险上升。',
         effects: {
-            resTaxMod:     0,
-            comTaxMod:     0,
-            indTaxMod:     2,     // +2% effective industrial tax rate (more output)
-            pollutionMod:  35,    // heavy pollution
-            unemployMod:  -20,    // lots of blue-collar jobs
-            landValueMod: -10,    // pollution depresses land value
-            educationMod: -10,    // brain drain risk
-            healthMod:    -15,    // pollution health impact
-            parkBonus:      0
+            resTaxMod: 0, comTaxMod: 0, indTaxMod: 2,
+            pollutionMod: 35, unemployMod: -20, landValueMod: -10,
+            educationMod: -10, healthMod: -15, parkBonus: 0,
+            giniMod: 3, greenRateMod: -5, livelihoodMod: -5
         }
     },
     {
         id: Micro.INDUSTRY_TOURISM,
-        name: 'Tourism',
+        name: '文旅服务',
         icon: '🌴',
-        description: 'Service-economy city. Strong commercial tax base, parks are highly valued; low crime required.',
+        description: '服务业与文旅为主。商业税收强，公园价值高，但对治安要求严格。',
         effects: {
-            resTaxMod:     0,
-            comTaxMod:     2,     // +2% effective commercial tax rate (visitor spending)
-            indTaxMod:    -1,     // less industry
-            pollutionMod: -10,
-            unemployMod:   10,    // seasonal / service jobs are unstable
-            landValueMod:  15,    // scenic appeal
-            educationMod:   5,
-            healthMod:     10,    // clean environment
-            parkBonus:      3     // each park tile worth 3 extra happiness points
+            resTaxMod: 0, comTaxMod: 2, indTaxMod: -1,
+            pollutionMod: -10, unemployMod: 10, landValueMod: 15,
+            educationMod: 5, healthMod: 10, parkBonus: 3,
+            giniMod: 0, greenRateMod: 3, livelihoodMod: 5
         }
     },
     {
         id: Micro.INDUSTRY_FARMING,
-        name: 'Farming & Agriculture',
+        name: '现代农业',
         icon: '🌾',
-        description: 'Rural-focused economy. Low pollution and stable employment, but modest tax yields.',
+        description: '绿色农业经济。低污染、就业稳定，但税收规模有限。',
         effects: {
-            resTaxMod:     0,
-            comTaxMod:    -1,     // lower commercial activity
-            indTaxMod:    -1,     // modest industrial output
-            pollutionMod: -25,    // very clean
-            unemployMod:  -10,    // stable rural employment
-            landValueMod:   5,
-            educationMod:   0,
-            healthMod:     20,    // clean air / food supply boost
-            parkBonus:      2
+            resTaxMod: 0, comTaxMod: -1, indTaxMod: -1,
+            pollutionMod: -25, unemployMod: -10, landValueMod: 5,
+            educationMod: 0, healthMod: 20, parkBonus: 2,
+            giniMod: -2, greenRateMod: 5, livelihoodMod: 5
+        }
+    },
+    {
+        id: Micro.INDUSTRY_GREEN,
+        name: '绿色生态',
+        icon: '🌳',
+        description: '以生态文明为核心，优先环境保护和低碳发展。污染极低、绿化率高，但经济增长较缓。',
+        effects: {
+            resTaxMod: -1, comTaxMod: -1, indTaxMod: -2,
+            pollutionMod: -40, unemployMod: 5, landValueMod: 10,
+            educationMod: 5, healthMod: 25, parkBonus: 4,
+            giniMod: -3, greenRateMod: 10, livelihoodMod: 10
+        }
+    },
+    {
+        id: Micro.INDUSTRY_SMART,
+        name: '智慧城市',
+        icon: '🧠',
+        description: '数字化治理先行，数据驱动决策。治理效能显著提升，但前期投入大。',
+        effects: {
+            resTaxMod: 0, comTaxMod: 1, indTaxMod: 0,
+            pollutionMod: -5, unemployMod: -5, landValueMod: 5,
+            educationMod: 15, healthMod: 5, parkBonus: 0,
+            giniMod: 0, greenRateMod: 0, livelihoodMod: 5
+        }
+    },
+    {
+        id: Micro.INDUSTRY_WELFARE,
+        name: '民生优先',
+        icon: '❤️',
+        description: '以人民幸福为核心目标。民生指数和健康水平大幅提升，但财政压力较大。',
+        effects: {
+            resTaxMod: 0, comTaxMod: -1, indTaxMod: -1,
+            pollutionMod: -5, unemployMod: -5, landValueMod: 0,
+            educationMod: 10, healthMod: 20, parkBonus: 2,
+            giniMod: -8, greenRateMod: 2, livelihoodMod: 20
+        }
+    },
+    {
+        id: Micro.INDUSTRY_INNOVATION,
+        name: '创新驱动',
+        icon: '🚀',
+        description: '聚焦科技研发和产业创新。教育与创新指数领先，但社会公平风险上升。',
+        effects: {
+            resTaxMod: 1, comTaxMod: 2, indTaxMod: 1,
+            pollutionMod: -10, unemployMod: -10, landValueMod: 15,
+            educationMod: 25, healthMod: 0, parkBonus: 0,
+            giniMod: 5, greenRateMod: 0, livelihoodMod: -5
         }
     }
 ];

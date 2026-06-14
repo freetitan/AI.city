@@ -39,8 +39,8 @@ export class Hub_Build {
         this.inner.appendChild(this.img1);
         this.inner.appendChild(this.innerb);
 
-        const b0 = this.addBottomButton(this.inner, 407, 'BUILD')
-        const b1 = this.addBottomButton(this.inner, 550, 'SERVICE')
+        const b0 = this.addBottomButton(this.inner, 407, '建筑')
+        const b1 = this.addBottomButton(this.inner, 550, '服务')
         b0.addEventListener('click',  (e)=>{ e.preventDefault(); self.switchMenu(0); }, false);
         b1.addEventListener('click',  (e)=>{ e.preventDefault(); self.switchMenu(1); }, false);
 
@@ -224,9 +224,9 @@ export class Hub_Build {
         this.toolOver.style.borderColor = Base.toolSet[tid].color
         var name = Base.toolSet[tid].tool;
         name = name.charAt(0).toUpperCase() + name.substring(1).toLowerCase();
-        if(id.name===19) this.toolInfo.innerHTML = 'Drag view';
-        else if(id.name===20) this.toolInfo.innerHTML = 'Get info';
-        else if(id.name===21) this.toolInfo.innerHTML = 'Rotate view';
+        if(id.name===19) this.toolInfo.innerHTML = '拖动视图';
+        else if(id.name===20) this.toolInfo.innerHTML = '查看信息';
+        else if(id.name===21) this.toolInfo.innerHTML = '旋转视图';
         else this.toolInfo.innerHTML = name+'&nbsp;<span style="color:#00d26a;">'+ Base.toolSet[tid].price+'</span>💲';
     
     }

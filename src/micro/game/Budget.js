@@ -64,6 +64,24 @@ export class Budget {
         this.educationSpend = 0;
         this.educationEffect = Micro.MAX_EDUCATION_EFFECT;
 
+        // ── Social Security 社会保障 ────────────────────────────
+        this.socialSecurityMaintenanceBudget = 0;
+        this.socialSecurityPercent = 1;
+        this.socialSecuritySpend = 0;
+        this.socialSecurityEffect = Micro.MAX_SOCIAL_SECURITY_EFFECT;
+
+        // ── Environment Protection 环境保护 ─────────────────────
+        this.environmentMaintenanceBudget = 0;
+        this.environmentPercent = 1;
+        this.environmentSpend = 0;
+        this.environmentEffect = Micro.MAX_ENVIRONMENT_EFFECT;
+
+        // ── Tech Innovation 科技创新 ─────────────────────────────
+        this.techInnovationMaintenanceBudget = 0;
+        this.techInnovationPercent = 1;
+        this.techInnovationSpend = 0;
+        this.techInnovationEffect = Micro.MAX_TECH_INNOVATION_EFFECT;
+
     }
 
     save (saveData) {
@@ -85,6 +103,9 @@ export class Budget {
     get policeFund () { return this.policeMaintenanceBudget; }
     get waterFund () { return this.waterMaintenanceBudget; }
     get educationFund () { return this.educationMaintenanceBudget; }
+    get socialSecurityFund () { return this.socialSecurityMaintenanceBudget; }
+    get environmentFund () { return this.environmentMaintenanceBudget; }
+    get techInnovationFund () { return this.techInnovationMaintenanceBudget; }
 
     // Returns the annual interest payment owed on outstanding bond debt.
     getBondAnnualPayment () {
@@ -141,7 +162,10 @@ export class Budget {
         this.policeSpend    = Math.round(this.policeMaintenanceBudget    * this.policePercent);
         this.waterSpend     = Math.round(this.waterMaintenanceBudget     * this.waterPercent);
         this.educationSpend = Math.round(this.educationMaintenanceBudget * this.educationPercent);
-        var total = this.roadSpend + this.fireSpend + this.policeSpend + this.waterSpend + this.educationSpend;
+        this.socialSecuritySpend = Math.round(this.socialSecurityMaintenanceBudget * this.socialSecurityPercent);
+        this.environmentSpend = Math.round(this.environmentMaintenanceBudget * this.environmentPercent);
+        this.techInnovationSpend = Math.round(this.techInnovationMaintenanceBudget * this.techInnovationPercent);
+        var total = this.roadSpend + this.fireSpend + this.policeSpend + this.waterSpend + this.educationSpend + this.socialSecuritySpend + this.environmentSpend + this.techInnovationSpend;
 
         // If we don't have any services on the map, we can bail early
         if (total === 0) {
@@ -150,7 +174,10 @@ export class Budget {
             this.policePercent    = 1;
             this.waterPercent     = 1;
             this.educationPercent = 1;
-            return {road: 1, fire: 1, police: 1, water: 1, education: 1};
+            this.socialSecurityPercent = 1;
+            this.environmentPercent = 1;
+            this.techInnovationPercent = 1;
+            return {road: 1, fire: 1, police: 1, water: 1, education: 1, socialSecurity: 1, environment: 1, techInnovation: 1};
         }
 
         // How much are we actually going to spend?
@@ -159,6 +186,9 @@ export class Budget {
         var policeCost    = 0;
         var waterCost     = 0;
         var educationCost = 0;
+        var socialSecurityCost = 0;
+        var environmentCost = 0;
+        var techInnovationCost = 0;
 
         var cashRemaining = this.totalFunds + this.taxFund;
 
@@ -183,6 +213,18 @@ export class Budget {
         else educationCost = cashRemaining;
         cashRemaining -= educationCost;
 
+        if (cashRemaining >= this.socialSecuritySpend) socialSecurityCost = this.socialSecuritySpend;
+        else socialSecurityCost = cashRemaining;
+        cashRemaining -= socialSecurityCost;
+
+        if (cashRemaining >= this.environmentSpend) environmentCost = this.environmentSpend;
+        else environmentCost = cashRemaining;
+        cashRemaining -= environmentCost;
+
+        if (cashRemaining >= this.techInnovationSpend) techInnovationCost = this.techInnovationSpend;
+        else techInnovationCost = cashRemaining;
+        cashRemaining -= techInnovationCost;
+
         if (this.roadMaintenanceBudget > 0)      this.roadPercent      = (roadCost      / this.roadMaintenanceBudget).toPrecision(2)      - 0;
         else this.roadPercent = 1;
 
@@ -198,7 +240,16 @@ export class Budget {
         if (this.educationMaintenanceBudget > 0) this.educationPercent = (educationCost / this.educationMaintenanceBudget).toPrecision(2) - 0;
         else this.educationPercent = 1;
 
-        return { road: roadCost, police: policeCost, fire: fireCost, water: waterCost, education: educationCost };
+        if (this.socialSecurityMaintenanceBudget > 0) this.socialSecurityPercent = (socialSecurityCost / this.socialSecurityMaintenanceBudget).toPrecision(2) - 0;
+        else this.socialSecurityPercent = 1;
+
+        if (this.environmentMaintenanceBudget > 0) this.environmentPercent = (environmentCost / this.environmentMaintenanceBudget).toPrecision(2) - 0;
+        else this.environmentPercent = 1;
+
+        if (this.techInnovationMaintenanceBudget > 0) this.techInnovationPercent = (techInnovationCost / this.techInnovationMaintenanceBudget).toPrecision(2) - 0;
+        else this.techInnovationPercent = 1;
+
+        return { road: roadCost, police: policeCost, fire: fireCost, water: waterCost, education: educationCost, socialSecurity: socialSecurityCost, environment: environmentCost, techInnovation: techInnovationCost };
     }
 
     // User initiated budget
@@ -222,14 +273,17 @@ export class Budget {
         var fireCost      = costs.fire;
         var waterCost     = costs.water || 0;
         var educationCost = costs.education || 0;
-        var totalCost = roadCost + policeCost + fireCost + waterCost + educationCost;
+        var socialSecurityCost = costs.socialSecurity || 0;
+        var environmentCost = costs.environment || 0;
+        var techInnovationCost = costs.techInnovation || 0;
+        var totalCost = roadCost + policeCost + fireCost + waterCost + educationCost + socialSecurityCost + environmentCost + techInnovationCost;
         var cashRemaining = this.totalFunds + this.taxFund - totalCost;
 
         // Autobudget
         if ((cashRemaining > 0 && this.autoBudget) || fromWindow) {
             // Either we were able to fully fund services, or we have just normalised user input. Go ahead and spend.
             this.awaitingValues = false;
-            this.doBudgetSpend( roadCost, fireCost, policeCost, waterCost, educationCost );
+            this.doBudgetSpend( roadCost, fireCost, policeCost, waterCost, educationCost, socialSecurityCost, environmentCost, techInnovationCost );
             return;
         }
 
@@ -241,14 +295,17 @@ export class Budget {
         EventEmitter.emitEvent(Messages.NO_MONEY);
     }
 
-    doBudgetSpend ( roadValue, fireValue, policeValue, waterValue, educationValue ) {
+    doBudgetSpend ( roadValue, fireValue, policeValue, waterValue, educationValue, socialSecurityValue, environmentValue, techInnovationValue ) {
 
         this.roadSpend      = roadValue;
         this.fireSpend      = fireValue;
         this.policeSpend    = policeValue;
         this.waterSpend     = waterValue     || 0;
         this.educationSpend = educationValue || 0;
-        var total = this.roadSpend + this.fireSpend + this.policeSpend + this.waterSpend + this.educationSpend;
+        this.socialSecuritySpend = socialSecurityValue || 0;
+        this.environmentSpend = environmentValue || 0;
+        this.techInnovationSpend = techInnovationValue || 0;
+        var total = this.roadSpend + this.fireSpend + this.policeSpend + this.waterSpend + this.educationSpend + this.socialSecuritySpend + this.environmentSpend + this.techInnovationSpend;
 
         this.spend(-(this.taxFund - total) );
         this.updateFundEffects();
@@ -261,6 +318,9 @@ export class Budget {
         this.fireSpend      = Math.round(this.fireMaintenanceBudget      * this.firePercent);
         this.policeSpend    = Math.round(this.policeMaintenanceBudget    * this.policePercent);
         this.educationSpend = Math.round(this.educationMaintenanceBudget * this.educationPercent);
+        this.socialSecuritySpend = Math.round(this.socialSecurityMaintenanceBudget * this.socialSecurityPercent);
+        this.environmentSpend = Math.round(this.environmentMaintenanceBudget * this.environmentPercent);
+        this.techInnovationSpend = Math.round(this.techInnovationMaintenanceBudget * this.techInnovationPercent);
 
         // Update the effect this level of spending will have on infrastructure deterioration
         this.roadEffect      = Micro.MAX_ROAD_EFFECT;
@@ -268,6 +328,9 @@ export class Budget {
         this.fireEffect      = Micro.MAX_FIRESTATION_EFFECT;
         this.waterEffect     = Micro.MAX_WATER_EFFECT;
         this.educationEffect = Micro.MAX_EDUCATION_EFFECT;
+        this.socialSecurityEffect = Micro.MAX_SOCIAL_SECURITY_EFFECT;
+        this.environmentEffect = Micro.MAX_ENVIRONMENT_EFFECT;
+        this.techInnovationEffect = Micro.MAX_TECH_INNOVATION_EFFECT;
 
         if (this.roadMaintenanceBudget > 0)      this.roadEffect      = Math.floor(this.roadEffect      * this.roadSpend      / this.roadMaintenanceBudget);
         if (this.fireMaintenanceBudget > 0)      this.fireEffect      = Math.floor(this.fireEffect      * this.fireSpend      / this.fireMaintenanceBudget);
@@ -276,6 +339,12 @@ export class Budget {
         else this.waterEffect = Micro.MAX_WATER_EFFECT;
         if (this.educationMaintenanceBudget > 0) this.educationEffect = Math.floor(this.educationEffect * this.educationSpend / this.educationMaintenanceBudget);
         else this.educationEffect = Micro.MAX_EDUCATION_EFFECT;
+        if (this.socialSecurityMaintenanceBudget > 0) this.socialSecurityEffect = Math.floor(this.socialSecurityEffect * this.socialSecuritySpend / this.socialSecurityMaintenanceBudget);
+        else this.socialSecurityEffect = Micro.MAX_SOCIAL_SECURITY_EFFECT;
+        if (this.environmentMaintenanceBudget > 0) this.environmentEffect = Math.floor(this.environmentEffect * this.environmentSpend / this.environmentMaintenanceBudget);
+        else this.environmentEffect = Micro.MAX_ENVIRONMENT_EFFECT;
+        if (this.techInnovationMaintenanceBudget > 0) this.techInnovationEffect = Math.floor(this.techInnovationEffect * this.techInnovationSpend / this.techInnovationMaintenanceBudget);
+        else this.techInnovationEffect = Micro.MAX_TECH_INNOVATION_EFFECT;
 
     }
 
@@ -289,6 +358,12 @@ export class Budget {
         this.waterMaintenanceBudget = Math.floor(census.totalPop / 1000) * Micro.waterMaintenanceCost;
         // Education: cost per hospital and school (church) in the city
         this.educationMaintenanceBudget = (census.hospitalPop + census.churchPop) * Micro.educationMaintenanceCost;
+        // Social Security: scales with total population
+        this.socialSecurityMaintenanceBudget = Math.floor(census.totalPop / 1000) * Micro.socialSecurityMaintenanceCost;
+        // Environment Protection: scales with total population
+        this.environmentMaintenanceBudget = Math.floor(census.totalPop / 1000) * Micro.environmentMaintenanceCost;
+        // Tech Innovation: scales with total population
+        this.techInnovationMaintenanceBudget = Math.floor(census.totalPop / 1000) * Micro.techInnovationMaintenanceCost;
 
         var roadCost = census.roadTotal * Micro.roadMaintenanceCost;
         var railCost = census.railTotal * Micro.railMaintenanceCost;

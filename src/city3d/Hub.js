@@ -58,15 +58,15 @@ export class Hub {
 
         this.loadTitle = document.createElement('div');
         this.loadTitle.className = 'loading-title';
-        this.loadTitle.textContent = '3D.CITY';
+        this.loadTitle.textContent = '智慧城市';
 
         this.loadSub = document.createElement('div');
         this.loadSub.className = 'loading-subtitle';
-        this.loadSub.textContent = 'City Builder';
+        this.loadSub.textContent = '智能管理与政策仿真系统';
 
         this.text = document.createElement('div');
         this.text.className = 'loading-status';
-        this.text.textContent = 'Loading…';
+        this.text.textContent = '加载中…';
 
         this.loader = document.createElement('div');
         this.loader.className = 'loading-spinner';
@@ -162,7 +162,7 @@ export class Hub {
                 if (this.full.parentNode !== this.hub) this.hub.appendChild( this.full );
                 if(this.loadTitle){this.full.removeChild(this.loadTitle);this.loadTitle = null;}
                 if(this.loadSub){this.full.removeChild(this.loadSub);this.loadSub= null;}
-                this.text.textContent = 'Generating map…'
+                this.text.textContent = '生成地图中…'
                 this.isGen = true
             }
         } else {
@@ -185,9 +185,9 @@ export class Hub {
 
     initStartHub() {
 
-        const savegame = window.localStorage.getItem( '3DcityJSGame' );
+        const savegame = window.localStorage.getItem( 'SmartCitySimGame' );
 
-        let textbase = '<span style="color:#909A96; font-size:10px; ">&nbsp;FPS</span>'
+        let textbase = '<span style="color:#909A96; font-size:10px; ">&nbsp;帧率</span>'
         this.version.innerHTML = textbase + ' . v ' + AppState.version  + (AppState.isWebGPU?' . GPU' : ' . GL2')+(AppState.isWorker ? ' . W' : ' . D');
        
         this.mainmenu = document.createElement('div');
@@ -198,15 +198,15 @@ export class Hub {
         let b0, b1, b2, b3;
 
         this.hub.appendChild( this.mainmenu );
-        b0 = this.addButton(this.mainmenu, 'New Game', [260, 48, 40], null);
-        if( savegame ) b1 = this.addButton(this.mainmenu, 'Continue...', [260, 37, 22], null);
-        if( !AppState.isMobile ) b2 = this.addButton(this.mainmenu, 'Load Map', [260, 37, 22], null);
-        b3 = this.addButton(this.mainmenu, 'About',  [180, 37, 22], null);
+        b0 = this.addButton(this.mainmenu, '新建仿真', [260, 48, 40], null);
+        if( savegame ) b1 = this.addButton(this.mainmenu, '继续仿真...', [260, 37, 22], null);
+        if( !AppState.isMobile ) b2 = this.addButton(this.mainmenu, '加载地图', [260, 37, 22], null);
+        b3 = this.addButton(this.mainmenu, '关于',  [180, 37, 22], null);
 
         b0.addEventListener('click',  function ( e ) { e.preventDefault(); AppState.view3d.openMap('NEW'); }, false);
         if(b1) b1.addEventListener('click',  function ( e ) { e.preventDefault(); AppState.view3d.openMap('LOADLOCAL', savegame ); }, false);
         if(b2) b2.addEventListener('click',  function ( e ) { e.preventDefault(); AppState.view3d.openMap('LOAD'); }, false);
-        b3.addEventListener('click',  function ( e ) { e.preventDefault(); let w = window.open('https://github.com/lo-th/3d.city','_blank'); }, false);
+        b3.addEventListener('click',  function ( e ) { e.preventDefault(); let w = window.open('https://github.com/lo-th/AI.city','_blank'); }, false);
 
     }
 
@@ -227,11 +227,11 @@ export class Hub {
         this.mapmenu.style.cssText ='position:absolute; top:10px; left:50%; margin-left:-190px; width:380px; height:200px; pointer-events:none;';
         this.hub.appendChild( this.mapmenu );
 
-        const s1 = this.addSelector(this.mapmenu, "DIFFICULTY", ['EASY', 'MEDIUM', 'HARD'], AppState.main.setDifficulty, 1, [120,120,120], [24,24,24]);
-        const s2 = this.addSelector(this.mapmenu, "MAP SIZE", ['SMALL', 'MEDIUM', 'LARGE'], AppState.main.setSize, 1, [120,120,120], [24,24,24]);
+        const s1 = this.addSelector(this.mapmenu, "难度", ['初级', '中级', '高级'], AppState.main.setDifficulty, 1, [120,120,120], [24,24,24]);
+        const s2 = this.addSelector(this.mapmenu, "地图规模", ['小', '中', '大'], AppState.main.setSize, 1, [120,120,120], [24,24,24]);
 
-        const b1 = this.addButton(this.mapmenu, 'GENERATE', [180, 37,22], 'position:absolute; top:118px; left:6px;');
-        const b2 = this.addButton(this.mapmenu, 'PLAY',  [180, 37, 22], 'position:absolute; top:118px; left:194px;');
+        const b1 = this.addButton(this.mapmenu, '生成地图', [180, 37,22], 'position:absolute; top:118px; left:6px;');
+        const b2 = this.addButton(this.mapmenu, '开始仿真',  [180, 37, 22], 'position:absolute; top:118px; left:194px;');
 
         b1.addEventListener('click',  function ( e ) { e.preventDefault(); AppState.main.newMap(); }, false);
         b2.addEventListener('click',  function ( e ) { e.preventDefault(); AppState.main.playMap(); }, false);
@@ -395,15 +395,17 @@ export class Hub {
             children[0].style.width = 170*(value/max)+'px';
 
             switch(t.name){
-                case 'Residential Tax': children[1].innerHTML = t.name+' '+value+'%'; this.topHub.pannels.Budget.resTaxRate = value; this.topHub.pannels.Budget.apply(); break;
-                case 'Commercial Tax': children[1].innerHTML = t.name+' '+value+'%'; this.topHub.pannels.Budget.comTaxRate = value; this.topHub.pannels.Budget.apply();break;
-                case 'Industrial Tax': children[1].innerHTML = t.name+' '+value+'%'; this.topHub.pannels.Budget.indTaxRate = value; this.topHub.pannels.Budget.apply();break;
-                //case 'Tax':     children[1].innerHTML = t.name+' '+value+'%'; this.taxRate=value; break;
-                case 'Roads':   children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.roadFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.roadFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.roadRate=value; this.topHub.pannels.Budget.apply();break;
-                case 'Fire':    children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.fireFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.fireFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.fireRate=value; this.topHub.pannels.Budget.apply();break;
-                case 'Police':  children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.policeFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.policeFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.policeRate=value; this.topHub.pannels.Budget.apply();break;
-                case 'Water':   children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.waterFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.waterFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.waterRate=value; this.topHub.pannels.Budget.apply();break;
-                case 'Education': children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.educationFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.educationFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.educationRate=value; this.topHub.pannels.Budget.apply();break;
+                case '住宅税率': children[1].innerHTML = t.name+' '+value+'%'; this.topHub.pannels.Budget.resTaxRate = value; this.topHub.pannels.Budget.apply(); break;
+                case '商业税率': children[1].innerHTML = t.name+' '+value+'%'; this.topHub.pannels.Budget.comTaxRate = value; this.topHub.pannels.Budget.apply();break;
+                case '工业税率': children[1].innerHTML = t.name+' '+value+'%'; this.topHub.pannels.Budget.indTaxRate = value; this.topHub.pannels.Budget.apply();break;
+                case '道路维护':   children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.roadFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.roadFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.roadRate=value; this.topHub.pannels.Budget.apply();break;
+                case '消防服务':    children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.fireFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.fireFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.fireRate=value; this.topHub.pannels.Budget.apply();break;
+                case '警务服务':  children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.policeFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.policeFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.policeRate=value; this.topHub.pannels.Budget.apply();break;
+                case '供水系统':   children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.waterFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.waterFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.waterRate=value; this.topHub.pannels.Budget.apply();break;
+                case '教育投入': children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.educationFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.educationFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.educationRate=value; this.topHub.pannels.Budget.apply();break;
+                case '社会保障': children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.socialSecurityFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.socialSecurityFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.socialSecurityRate=value; this.topHub.pannels.Budget.apply();break;
+                case '环境保护': children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.environmentFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.environmentFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.environmentRate=value; this.topHub.pannels.Budget.apply();break;
+                case '科技创新': children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.techInnovationFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.techInnovationFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.techInnovationRate=value; this.topHub.pannels.Budget.apply();break;
             }
         }
 
@@ -515,7 +517,7 @@ export class Hub {
                 + ' font-size:20px; font-weight:600; letter-spacing:0.06em;'
                 + ' padding:4px 12px; border-radius:20px; pointer-events:none;'
                 + ' border:1px solid rgba(74,200,140,0.35); opacity:0; transition:opacity 0.4s;';
-            this.autoSaveIndicator.textContent = '✔ Auto-saved';
+            this.autoSaveIndicator.textContent = '✔ 已自动保存';
             this.hub.appendChild(this.autoSaveIndicator);
         }
         var el = this.autoSaveIndicator;

@@ -66,22 +66,22 @@ export class Hub_Top {
 
 	initPannel() {
 
-		this.pannelsIcon =['💰', '🔍', '⚖️', '💡', '🏆', '🏛️', '👁️', '⚠️', '💾', '❓']
+		this.pannelsIcon =['💰', '📊', '⚖️', '🏙️', '🏆', '📜', '👁️', '⚠️', '💾', '❓']
         let n = 0
 
         this.pannels = {
 
-            Budget :      new Hub_Budget(this.parent),
-            Eval:         new Hub_Eval(this.parent),
-            Orders:       new Hub_Ordinances(this.parent),
-            Economy:      new Hub_Economy(this.parent), 
-            Awards:       new Hub_Awards(this.parent),
+            财政 :      new Hub_Budget(this.parent),
+            评估:         new Hub_Eval(this.parent),
+            政策:       new Hub_Ordinances(this.parent),
+            发展模式:      new Hub_Economy(this.parent), 
+            成就:       new Hub_Awards(this.parent),
 
-            History:      new Hub_History(this.parent, true),
-            Overlay:      new Hub_Overlays(this.parent, true),
-            Disaster:     new Hub_Disaster(this.parent, true),
-            Files:        new Hub_Save_Load(this.parent, true), 
-            About:        new Hub_About(this.parent, true),
+            历史:      new Hub_History(this.parent, true),
+            图层:      new Hub_Overlays(this.parent, true),
+            灾害:     new Hub_Disaster(this.parent, true),
+            存档:        new Hub_Save_Load(this.parent, true), 
+            关于:        new Hub_About(this.parent, true),
         
         }
         
@@ -132,13 +132,13 @@ export class Hub_Top {
         this.statusBar2.style.cssText = 'position:absolute; width:528px; height:60px; top:46px; right:10px;';//28
         this.inner2.appendChild( this.statusBar2 );
 
-		var stats = [
-		    { key:'class',      label:'class',       ref:'class'       },
-            { key:'date',       label:'Date',        ref:'date'       },
-            { key:'population', label:'Population',  ref:'population' },
-            { key:'money',      label:'money',       ref:'money', color:'#00d26a'      },
-            { key:'score',      label:'Score',       ref:'score' , color:'#fcd53f'     },
-            { key:'happiness',  label:'happiness',   ref:'happiness' , color:'#fcd53f'     },
+        var stats = [
+		    { key:'class',      label:'城市等级',   ref:'class'       },
+            { key:'date',       label:'日期',        ref:'date'       },
+            { key:'population', label:'人口',  ref:'population' },
+            { key:'money',      label:'财政',       ref:'money', color:'#00d26a'      },
+            { key:'score',      label:'评分',       ref:'score' , color:'#fcd53f'     },
+            { key:'happiness',  label:'幸福指数',   ref:'happiness' , color:'#fcd53f'     },
         ];
 
         for(var i=0; i<stats.length; i++){
@@ -180,8 +180,8 @@ export class Hub_Top {
 
         this.class.innerHTML  = cityIcon[type]+'&nbsp'+type;
 		this.date.innerHTML       = seasonIcons[seasonIdx] +'&nbsp'+ infos[0];
-        this.money.innerHTML      = this.cashFlow +'&nbsp'+ infos[4]+'💲';
-        this.population.innerHTML = '🏠︎&nbsp' + infos[3];
+        this.money.innerHTML      = this.cashFlow +'&nbsp'+ infos[4]+'💰';
+        this.population.innerHTML = '🏠&nbsp' + infos[3];
         this.score.innerHTML      = '⭐&nbsp' + infos[2];
         this.happiness.innerHTML      = '<span style="color:' + happyColor + ';">' + happyIcon +'&nbsp'+ happiness + '%</span>';
 

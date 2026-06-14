@@ -5,7 +5,7 @@ export class Hub_History extends Hub_Pannel {
 
 	constructor( hub, isRight ) {
 
-		super( hub, 'History', isRight );
+		super( hub, '历史', isRight );
 
 		//this.pannel.style.cssText = 'position:absolute; top:44px; left:10px; width:260px; padding: 4px 4px;'
         //    + ' pointer-events:none; display:flex; flex-direction:column; border-radius:10px; ';
@@ -16,11 +16,11 @@ export class Hub_History extends Hub_Pannel {
 
 	update( data ){
 
-		var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+		var months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
 
         var html = '';
         if (!data || data.length === 0) {
-            html = '<div style="font-size:12px; color:rgba(180,210,240,0.5); text-align:center; padding:20px;">No events recorded yet</div>';
+            html = '<div style="font-size:12px; color:rgba(180,210,240,0.5); text-align:center; padding:20px;">暂无历史记录</div>';
         } else {
             for (var i = 0; i < data.length; i++) {
                 var evt = data[i];
