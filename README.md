@@ -94,13 +94,13 @@ npm run build
 
 ## 📸 界面预览
 
-![城市建造界面](./assets/img/preview01.jpg)
+![城市建造界面](https://freetitan.github.io/AI.city/assets/img/preview01.jpg)
 *3D城市建造视图*
 
-![管理系统](./assets/img/preview02.jpg)
+![管理系统](https://freetitan.github.io/AI.city/assets/img/preview02.jpg)
 *财政与政策管理面板*
 
-![数据可视化](./assets/img/preview03.jpg)
+![数据可视化](https://freetitan.github.io/AI.city/assets/img/preview03.jpg)
 *历史数据与评估报告*
 
 ---

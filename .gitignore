@@ -1,7 +1,39 @@
-desktop.ini
-dev.html
-node_modules
+# Dependencies
+node_modules/
 package-lock.json
-npm-debug.log
-prepa
-*.sh
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build temp
+dist/
+*.tmp
+*.log
+npm-debug.log*
+
+# Screenshots (development only)
+.catpaw/
+
+# Local env
+.env
+.env.local
+.env.*.local
+
+# Cache
+.cache/
+*.cache
+
+# Test coverage
+coverage/
+
+# Misc
+*.bak
+*.orig
