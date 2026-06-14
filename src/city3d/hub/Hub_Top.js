@@ -180,7 +180,7 @@ export class Hub_Top {
 
         this.class.innerHTML  = cityIcon[type]+'&nbsp'+type;
 		this.date.innerHTML       = seasonIcons[seasonIdx] +'&nbsp'+ infos[0];
-        this.money.innerHTML      = this.cashFlow +'&nbsp'+ infos[4]+'💰';
+        this.money.innerHTML      = this.cashFlow +'&nbsp￥'+ infos[4];
         this.population.innerHTML = '🏠&nbsp' + infos[3];
         this.score.innerHTML      = '⭐&nbsp' + infos[2];
         this.happiness.innerHTML      = '<span style="color:' + happyColor + ';">' + happyIcon +'&nbsp'+ happiness + '%</span>';

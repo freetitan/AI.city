@@ -70,8 +70,8 @@ export class Hub_Budget extends Hub_Pannel {
         this.hubMain.setSliderValue('环境保护', this.environmentRate !== undefined ? this.environmentRate : 100, 100, this.environmentFund);
         this.hubMain.setSliderValue('科技创新', this.techInnovationRate !== undefined ? this.techInnovationRate : 100, 100, this.techInnovationFund);
 
-        this.budgetResult.innerHTML = '<span style="color:rgba(180,210,240,0.6)">年度财政收入:</span> ' + this.cashFlow + '$'
-                                    + '<br><span style="color:rgba(180,210,240,0.6)">税收总额:</span> ' + taxesCollected + '$';
+        this.budgetResult.innerHTML = '<span style="color:rgba(180,210,240,0.6)">年度财政收入:</span> ￥' + this.cashFlow
+                                    + '<br><span style="color:rgba(180,210,240,0.6)">税收总额:</span> ￥' + taxesCollected;
 
         // Update bond info display
         var bondDebt    = this.bondDebt        || 0;
@@ -80,10 +80,10 @@ export class Hub_Budget extends Hub_Pannel {
         var debtColor   = bondDebt === 0 ? 'rgba(180,210,240,0.6)' : bondDebt > bondMax * 0.8 ? '#e05555' : '#f0b84a';
         if (this.bondDebtInfo) {
             this.bondDebtInfo.innerHTML = '<span style="color:rgba(180,210,240,0.6);">未偿还债务:</span>'
-                + ' <span style="color:' + debtColor + '; font-weight:600;">' + bondDebt + '$</span>'
+                + ' <span style="color:' + debtColor + '; font-weight:600;">￥' + bondDebt + '</span>'
                 + '<br><span style="color:rgba(180,210,240,0.6);">年利息:</span>'
-                + ' <span style="color:' + (bondPayment > 0 ? '#f0b84a' : 'rgba(180,210,240,0.6)') + ';">' + bondPayment + '$</span>'
-                + '<br><span style="color:rgba(180,210,240,0.4); font-size:10px;">上限: ' + bondMax + '$ (年利率7%)</span>';
+                + ' <span style="color:' + (bondPayment > 0 ? '#f0b84a' : 'rgba(180,210,240,0.6)') + ';">￥' + bondPayment + '</span>'
+                + '<br><span style="color:rgba(180,210,240,0.4); font-size:10px;">上限: ￥' + bondMax + ' (年利率7%)</span>';
         }
 
 	}
@@ -154,12 +154,12 @@ export class Hub_Budget extends Hub_Pannel {
         bondBtnsRow.style.cssText = 'display:flex; gap:4px; pointer-events:auto; margin-bottom:6px;';
         body.appendChild(bondBtnsRow);
 
-        var b5k  = this.hubMain.addButton(bondBtnsRow, '+$5K',  [58, 22, 12], null);
-        var b10k = this.hubMain.addButton(bondBtnsRow, '+$10K', [62, 22, 12], null);
-        var b20k = this.hubMain.addButton(bondBtnsRow, '+$20K', [62, 22, 12], null);
-        b5k.title  = '发行$5,000债券 (年利率7%)';
-        b10k.title = '发行$10,000债券 (年利率7%)';
-        b20k.title = '发行$20,000债券 (年利率7%)';
+        var b5k  = this.hubMain.addButton(bondBtnsRow, '+￥5K',  [58, 22, 12], null);
+        var b10k = this.hubMain.addButton(bondBtnsRow, '+￥10K', [62, 22, 12], null);
+        var b20k = this.hubMain.addButton(bondBtnsRow, '+￥20K', [62, 22, 12], null);
+        b5k.title  = '发行￥5,000债券 (年利率7%)';
+        b10k.title = '发行￥10,000债券 (年利率7%)';
+        b20k.title = '发行￥20,000债券 (年利率7%)';
         b5k.addEventListener( 'click', function(e){ e.preventDefault(); AppState.main.issueBond(5000);  }, false);
         b10k.addEventListener('click', function(e){ e.preventDefault(); AppState.main.issueBond(10000); }, false);
         b20k.addEventListener('click', function(e){ e.preventDefault(); AppState.main.issueBond(20000); }, false);

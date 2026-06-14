@@ -222,12 +222,8 @@ export class Hub_Build {
     	let tid = this.tool[id];
 
         this.toolOver.style.borderColor = Base.toolSet[tid].color
-        var name = Base.toolSet[tid].tool;
-        name = name.charAt(0).toUpperCase() + name.substring(1).toLowerCase();
-        if(id.name===19) this.toolInfo.innerHTML = '拖动视图';
-        else if(id.name===20) this.toolInfo.innerHTML = '查看信息';
-        else if(id.name===21) this.toolInfo.innerHTML = '旋转视图';
-        else this.toolInfo.innerHTML = name+'&nbsp;<span style="color:#00d26a;">'+ Base.toolSet[tid].price+'</span>💲';
+        var name = Base.toolSet[tid].label || Base.toolSet[tid].tool;
+        this.toolInfo.innerHTML = name+'&nbsp;<span style="color:#00d26a;">￥'+ Base.toolSet[tid].price+'</span>';
     
     }
 

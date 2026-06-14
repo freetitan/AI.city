@@ -355,7 +355,7 @@ export class Hub {
         bg.id   = name;
 
         if(v2!==null){
-            txt.innerHTML = name+' '+value+'% of '+v2+'$ = '+Math.floor(v2*(value/100))+'$';
+            txt.innerHTML = name+' '+value+'% of ￥'+v2+' = ￥'+Math.floor(v2*(value/100));
         } else {
             txt.innerHTML = name+' '+value+'%';
         }
@@ -377,7 +377,7 @@ export class Hub {
         let children = slide.childNodes;
         children[0].style.width = 170*(value/max)+'px';
         if(v2!==null){
-            children[1].innerHTML = name+' '+value+'% of '+v2+'$ = '+Math.floor(v2*(value/100))+'$';
+            children[1].innerHTML = name+' '+value+'% of ￥'+v2+' = ￥'+Math.floor(v2*(value/100));
         } else {
             children[1].innerHTML = name+' '+value+'%';
         }
@@ -398,14 +398,14 @@ export class Hub {
                 case '住宅税率': children[1].innerHTML = t.name+' '+value+'%'; this.topHub.pannels.Budget.resTaxRate = value; this.topHub.pannels.Budget.apply(); break;
                 case '商业税率': children[1].innerHTML = t.name+' '+value+'%'; this.topHub.pannels.Budget.comTaxRate = value; this.topHub.pannels.Budget.apply();break;
                 case '工业税率': children[1].innerHTML = t.name+' '+value+'%'; this.topHub.pannels.Budget.indTaxRate = value; this.topHub.pannels.Budget.apply();break;
-                case '道路维护':   children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.roadFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.roadFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.roadRate=value; this.topHub.pannels.Budget.apply();break;
-                case '消防服务':    children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.fireFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.fireFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.fireRate=value; this.topHub.pannels.Budget.apply();break;
-                case '警务服务':  children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.policeFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.policeFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.policeRate=value; this.topHub.pannels.Budget.apply();break;
-                case '供水系统':   children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.waterFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.waterFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.waterRate=value; this.topHub.pannels.Budget.apply();break;
-                case '教育投入': children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.educationFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.educationFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.educationRate=value; this.topHub.pannels.Budget.apply();break;
-                case '社会保障': children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.socialSecurityFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.socialSecurityFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.socialSecurityRate=value; this.topHub.pannels.Budget.apply();break;
-                case '环境保护': children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.environmentFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.environmentFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.environmentRate=value; this.topHub.pannels.Budget.apply();break;
-                case '科技创新': children[1].innerHTML = t.name+' '+value+'% of '+(this.topHub.pannels.Budget.techInnovationFund||0)+'$ = '+Math.floor((this.topHub.pannels.Budget.techInnovationFund||0)*(value/100))+'$'; this.topHub.pannels.Budget.techInnovationRate=value; this.topHub.pannels.Budget.apply();break;
+                case '道路维护':   children[1].innerHTML = t.name+' '+value+'% of ￥'+(this.topHub.pannels.Budget.roadFund||0)+' = ￥'+Math.floor((this.topHub.pannels.Budget.roadFund||0)*(value/100)); this.topHub.pannels.Budget.roadRate=value; this.topHub.pannels.Budget.apply();break;
+                case '消防服务':    children[1].innerHTML = t.name+' '+value+'% of ￥'+(this.topHub.pannels.Budget.fireFund||0)+' = ￥'+Math.floor((this.topHub.pannels.Budget.fireFund||0)*(value/100)); this.topHub.pannels.Budget.fireRate=value; this.topHub.pannels.Budget.apply();break;
+                case '警务服务':  children[1].innerHTML = t.name+' '+value+'% of ￥'+(this.topHub.pannels.Budget.policeFund||0)+' = ￥'+Math.floor((this.topHub.pannels.Budget.policeFund||0)*(value/100)); this.topHub.pannels.Budget.policeRate=value; this.topHub.pannels.Budget.apply();break;
+                case '供水系统':   children[1].innerHTML = t.name+' '+value+'% of ￥'+(this.topHub.pannels.Budget.waterFund||0)+' = ￥'+Math.floor((this.topHub.pannels.Budget.waterFund||0)*(value/100)); this.topHub.pannels.Budget.waterRate=value; this.topHub.pannels.Budget.apply();break;
+                case '教育投入': children[1].innerHTML = t.name+' '+value+'% of ￥'+(this.topHub.pannels.Budget.educationFund||0)+' = ￥'+Math.floor((this.topHub.pannels.Budget.educationFund||0)*(value/100)); this.topHub.pannels.Budget.educationRate=value; this.topHub.pannels.Budget.apply();break;
+                case '社会保障': children[1].innerHTML = t.name+' '+value+'% of ￥'+(this.topHub.pannels.Budget.socialSecurityFund||0)+' = ￥'+Math.floor((this.topHub.pannels.Budget.socialSecurityFund||0)*(value/100)); this.topHub.pannels.Budget.socialSecurityRate=value; this.topHub.pannels.Budget.apply();break;
+                case '环境保护': children[1].innerHTML = t.name+' '+value+'% of ￥'+(this.topHub.pannels.Budget.environmentFund||0)+' = ￥'+Math.floor((this.topHub.pannels.Budget.environmentFund||0)*(value/100)); this.topHub.pannels.Budget.environmentRate=value; this.topHub.pannels.Budget.apply();break;
+                case '科技创新': children[1].innerHTML = t.name+' '+value+'% of ￥'+(this.topHub.pannels.Budget.techInnovationFund||0)+' = ￥'+Math.floor((this.topHub.pannels.Budget.techInnovationFund||0)*(value/100)); this.topHub.pannels.Budget.techInnovationRate=value; this.topHub.pannels.Budget.apply();break;
             }
         }
 

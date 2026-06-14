@@ -18,7 +18,7 @@ export class Hub_Ordinances extends Hub_Pannel {
 
         var costLabel = document.createElement('div');
         costLabel.style.cssText = 'font-size:11px; color:rgba(180,210,240,0.6); margin-bottom:8px; pointer-events:none;';
-        costLabel.textContent = '年度政策支出: ' + (annualCost || 0) + '$';
+        costLabel.textContent = '年度政策支出: ￥' + (annualCost || 0);
         this.body.appendChild(costLabel);
 
         if (Array.isArray(ordinances)) {
@@ -80,7 +80,7 @@ export class Hub_Ordinances extends Hub_Pannel {
         info.style.cssText = 'pointer-events:none;';
         info.innerHTML = '<div style="font-size:12px; font-weight:600; color:#dce8f5;">' + ord.name + '</div>'
                        + '<div style="font-size:10px; color:rgba(180,210,240,0.6); line-height:1.4;">' + ord.description + '</div>'
-                       + (ord.annualCost > 0 ? '<div style="font-size:10px; color:rgba(224,160,60,0.85); margin-top:1px;">年支出: ' + ord.annualCost + '$</div>' : '<div style="font-size:10px; color:rgba(180,210,240,0.4); margin-top:1px;">无财政成本</div>');
+                       + (ord.annualCost > 0 ? '<div style="font-size:10px; color:rgba(224,160,60,0.85); margin-top:1px;">年支出: ￥' + ord.annualCost + '</div>' : '<div style="font-size:10px; color:rgba(180,210,240,0.4); margin-top:1px;">无财政成本</div>');
         row.appendChild(info);
 
         row.addEventListener('click', function(e){
