@@ -73,27 +73,54 @@
     "appId": "com.freetitan.ai-city",
     "productName": "智慧城市",
     "directories": {
-      "output": "dist"
+      "output": "dist",
+      "buildResources": "build"
     },
     "files": [
+      "!node_modules",
+      "!dist",
+      "!utils",
+      "!src",
+      "!.gitignore",
+      "!README.md",
+      "!README-WINDOWS.md",
+      "!LICENSE.md",
+      "!LICENSE",
+      "!COPYING",
+      "!**/*.md",
       "build/**/*",
       "assets/**/*",
       "sound/**/*",
       "index.html",
       "index_gpu.html",
       "favicon.ico",
-      "electron/**/*"
+      "electron/**/*",
+      "package.json"
     ],
+    "asar": true,
     "win": {
-      "target": "nsis",
-      "icon": "favicon.ico"
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "智慧城市"
+      "shortcutName": "智慧城市",
+      "deleteAppDataOnUninstall": false
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-便携版.exe"
     }
   }
 }
