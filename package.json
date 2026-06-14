@@ -1,8 +1,8 @@
 {
-  "name": "ai.city",
+  "name": "ai-city",
   "version": "2.0.0",
   "description": "智慧城市 — 智能管理与政策仿真系统（基于Web的3D城市建造平台）",
-  "main": "./build/Main.js",
+  "main": "electron/main.cjs",
   "repository": {
     "type": "git",
     "url": "https://github.com/freetitan/AI.city.git"
@@ -14,17 +14,14 @@
     "package.json",
     "LICENSE",
     "README.md",
-    "build/citygame.js",
-    "build/citygame.min.js",
-    "build/citygame.module.js",
+    "build/",
     "assets/",
+    "sound/",
     "index.html",
-    "index_gpu.html"
+    "index_gpu.html",
+    "favicon.ico",
+    "electron/"
   ],
-  "directories": {
-    "doc": "docs",
-    "example": "examples"
-  },
   "eslintConfig": {
     "extends": "mdcs"
   },
@@ -33,7 +30,13 @@
     "main": "rollup -c utils/rollup.config.main.js",
     "city": "rollup -c utils/rollup.config.city.js",
     "dev": "http-server ./ -c-1 -a localhost -p 8666 -o dev.html",
-    "start": "http-server ./ -c-1 -a localhost -p 8686 -o ./index.html"
+    "start": "http-server ./ -c-1 -a localhost -p 8686 -o ./index.html",
+    "electron": "electron .",
+    "electron-dev": "npm run build && electron .",
+    "dist": "npm run build && electron-builder",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:linux": "npm run build && electron-builder --linux"
   },
   "keywords": [
     "ai.city",
@@ -58,10 +61,39 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-terser": "^1.0.0",
+    "electron": "^42.4.0",
+    "electron-builder": "^26.15.3",
     "magic-string": "^0.30.0",
     "rollup": "^4.6.0"
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "build": {
+    "appId": "com.freetitan.ai-city",
+    "productName": "智慧城市",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "build/**/*",
+      "assets/**/*",
+      "sound/**/*",
+      "index.html",
+      "index_gpu.html",
+      "favicon.ico",
+      "electron/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "favicon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "智慧城市"
+    }
   }
 }
