@@ -1,9 +1,12 @@
 {
-  "name": "3d.city",
-  "version": "1.0.0",
-  "description": "JavaScript city builder game",
+  "name": "ai.city",
+  "version": "2.0.0",
+  "description": "智慧城市 — 智能管理与政策仿真系统（基于Web的3D城市建造平台）",
   "main": "./build/Main.js",
-  "repository": "lo-th/3d.city",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/freetitan/AI.city.git"
+  },
   "type": "module",
   "jsnext:main": "./build/citygame.module.js",
   "module": "build/citygame.module.js",
@@ -13,7 +16,10 @@
     "README.md",
     "build/citygame.js",
     "build/citygame.min.js",
-    "build/citygame.module.js"
+    "build/citygame.module.js",
+    "assets/",
+    "index.html",
+    "index_gpu.html"
   ],
   "directories": {
     "doc": "docs",
@@ -30,20 +36,32 @@
     "start": "http-server ./ -c-1 -a localhost -p 8686 -o ./index.html"
   },
   "keywords": [
-    "3d.city",
-    "city",
-    "builder"
+    "ai.city",
+    "city-builder",
+    "simulation",
+    "3d",
+    "webgl",
+    "webgpu",
+    "three.js",
+    "micropolis",
+    "urban-planning",
+    "policy-simulation",
+    "smart-city",
+    "game"
   ],
-  "author": "lo-th",
+  "author": "freetitan",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lo-th/3d.city/issues"
+    "url": "https://github.com/freetitan/AI.city/issues"
   },
-  "homepage": "https://lo-th.github.io/3d.city/",
+  "homepage": "https://freetitan.github.io/AI.city/",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-terser": "^1.0.0",
     "magic-string": "^0.30.0",
     "rollup": "^4.6.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
