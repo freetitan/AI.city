@@ -7,8 +7,11 @@ export class Hub_Disaster extends Hub_Pannel {
 
 		super( hub, '灾害', isRight );
 
+		// 显示名称（中文）
 		this.type = ['无', '怪兽袭击', '火灾', '洪水', '空难', '核泄漏', '龙卷风', '地震'];
-		this.icon = ['', '🦖 ', '🔥 ', '🌊 ', '✈︎ ', '💥 ', '🌪️ ', '♒︎ '];	
+		// 内部名称（英文，与 Micro.js 中的 DISASTER_ 常量匹配）
+		this.typeKey = ['None', 'Monster', 'Fire', 'Flood', 'Crash', 'Meltdown', 'Tornado', 'Earthquake'];
+		this.icon = ['', '🦖 ', '🔥 ', '🌊 ', '✈︎ ', '💥 ', '🌪️ ', '♒︎ '];
 		this.buttons = [];
 
 	}
@@ -20,8 +23,8 @@ export class Hub_Disaster extends Hub_Pannel {
         this.pannel.appendChild( this.body );
 
 		for(var i=0; i<this.type.length; i++){
-            this.buttons[i] = this.hubMain.addButton( this.body, this.icon[i] + this.type[i].toUpperCase(), [138, 24, 11],null);
-            this.buttons[i].name = this.type[i];
+            this.buttons[i] = this.hubMain.addButton( this.body, this.icon[i] + this.type[i], [138, 24, 11],null);
+            this.buttons[i].name = this.typeKey[i]; // 使用英文key传递给后端
             this.buttons[i].addEventListener('click',  function(e){ e.preventDefault(); AppState.main.setDisaster(this.name); }, false);
         }
 
